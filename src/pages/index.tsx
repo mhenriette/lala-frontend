@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/Navbar";
-import { Hero } from "@/components/layout/Hero";
+import { Hero } from "@/components/sections/Hero";
 import { PropertyCard } from "@/components/property/PropertyCard";
+import AboutSection from "@/components/sections/About";
+import FAQSection from "@/components/sections/Faq";
+import Footer from "@/components/layout/Footer";
 
 const properties = [
   {
@@ -21,6 +24,7 @@ const properties = [
     location: "Manhattan, NY 10001, USA",
     price: 850000,
     beds: 3,
+
     baths: 2,
     area: 1800,
     type: "sale" as const,
@@ -70,6 +74,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <AboutSection/>
+      <FAQSection/>
+      <Footer/>
     </main>
   );
 }
