@@ -1,11 +1,14 @@
-import axios from "axios";
+
 import { CredentialResponse } from "@react-oauth/google"
+import api from "@/services";
 
 const url = process.env.NEXT_PUBLIC_API_BASE_URL;
-export default login = (credentialResponse: CredentialResponse) => {
-  console.log("being calldeddd")
+
+export const login = async (credentialResponse: CredentialResponse) => {
   const googleAuthToken = credentialResponse.credential;
-  axios.post(`${url}/api/auth/sign`, {
+  const response = await api.post(`${url}/api/auth/signin`, {
     token: googleAuthToken,
   });
+  localStorage.setItem("@Auth:accessToken", response.data.access_token);
+  return response
 };

@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import login from "@/utils/login";
+import { login } from "@/utils/login";
+import { ProfileCard } from "../cards/ProfileCard";
+import { useAuth } from "@/context/AuthContext";
+import useIsSignedIn from "@/hooks/isSignedIn";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -12,7 +15,8 @@ const navLinks = [
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
+  const { signIn, signOut } = useAuth();
+  const isSignedIn = useIsSignedIn();
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 20;
@@ -23,9 +27,9 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleToggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // const handleToggleMenu = () => {
+  //   setIsMenuOpen(!isMenuOpen);
+  // };
 
   return (
     <nav
@@ -63,14 +67,23 @@ export const Navbar = () => {
               </Link>
             ))}
           </div>
-
-          {/* Sign In Button & Mobile Menu */}
-          <div className="flex items-center gap-4">
-            <GoogleLogin
-              onSuccess={login}
-              useOneTap
-            />
-          </div>
+          <>
+            {isSignedIn ? (
+              <ProfileCard
+                user={{
+                  name: "John Doe",
+                  email: "john.doe@example.com",
+                  image:
+                    "https://lh3.googleusercontent.com/a/ACg8ocIiAwOfoOkc6vorzZC6Npz3RfsNoBG3Ig6kVjMMDIu0Zd7KGQevnw=s96-c",
+                }}
+                onLogout={signOut}
+              />
+            ) : (
+              <div className="flex items-center gap-4">
+                <GoogleLogin onSuccess={signIn} useOneTap />
+              </div>
+            )}
+          </>
         </div>
 
         {/* Mobile Menu */}
@@ -90,6 +103,14 @@ export const Navbar = () => {
               {/* <Button className="w-full">Sign In</Button> */}
               <GoogleLogin onSuccess={login} useOneTap />
             </div>
+            <ProfileCard
+              user={{
+                name: "John Doe",
+                email: "john.doe@example.com",
+                image: "https://via.placeholder.com/150",
+              }}
+              onLogout={() => {}}
+            />
           </div>
         )}
       </div>

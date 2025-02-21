@@ -21,18 +21,36 @@ export default function CreateProperty() {
     description: "",
     pricePerNight: 0,
     location: "",
-    hostId: "" // This should be fetched from auth context in a real app
+    hostId: "" 
   })
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    
+
+    const data = {
+      title: formData.title,
+      description: formData.description,
+      pricePerNight: formData.pricePerNight,
+      location: formData.location,
+      hostId: "2ce842cf-b124-4b60-8934-ccc85082df5d",
+    };
+
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/properties/properties`, formData)
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/properties`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(formData, "formData",
+      )
       if (response.status === 201) {
-        router.push("/properties") // Redirect to properties list
+        router.push("/properties/create") // Redirect to properties list
       }
     } catch (error) {
       console.error("Failed to create property:", error)
