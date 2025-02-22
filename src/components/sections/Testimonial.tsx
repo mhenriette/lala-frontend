@@ -37,7 +37,7 @@ export default function TestimonialsSection() {
             What Our Clients Say
           </h2>
           <p className="text-lg text-muted-foreground">
-            Don't just take our word for it - hear from some of our satisfied
+            Do not just take our word for it - hear from some of our satisfied
             clients
           </p>
         </div>

@@ -6,9 +6,9 @@ import { useAuth } from "@/context/AuthContext";
 import useIsSignedIn from "@/hooks/isSignedIn";
 import { Skeleton } from "../ui/skeleton";
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/explore", label: "Explore" },
-  { href: "/about", label: "About" },
+  { href: "#home", label: "Home" },
+  { href: "#explore", label: "Explore" },
+  { href: "#about", label: "About" },
 ];
 
 export const Navbar = () => {
@@ -33,6 +33,15 @@ export const Navbar = () => {
       return signIn({ type: role, credentialResponse });
     };
 
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const targetId = e.currentTarget.href.split('#')[1];
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+    setIsMenuOpen(false);
+  };
 
   return (
     <nav
@@ -57,15 +66,16 @@ export const Navbar = () => {
 
           <div className="hidden md:flex items-center justify-center gap-8">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
+                onClick={handleScroll}
                 className={`text-base font-bold transition-all duration-300 hover:text-[#F25F4C] relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#F25F4C] after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 ${
                   scrolled ? "text-[#10172A]" : "text-white"
                 }`}
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
           </div>
           <>
@@ -89,23 +99,15 @@ export const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 space-y-2 mt-2 bg-white/95 rounded-lg">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
-                className="block px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={handleScroll}
+                className="block px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#F25F4C] hover:bg-blue-50 rounded-md transition-colors"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
-            <div className="px-4 py-2">
-              <GoogleLogin
-                onSuccess={(credentialResponse) =>
-                  handleLogin("host", credentialResponse)
-                }
-                useOneTap
-              />
-            </div>
             <ProfileCard user={userData} onLogout={signOut} />
           </div>
         )}

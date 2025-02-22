@@ -2,7 +2,7 @@ import { Building2, Users2, Trophy, Gem } from "lucide-react";
 
 export default function AboutSection() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-white" id="about">
       <div className="container px-4 mx-auto">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
