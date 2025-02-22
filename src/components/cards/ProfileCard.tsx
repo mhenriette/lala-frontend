@@ -10,11 +10,11 @@ import Image from "next/image"
 
 interface ProfileCardProps {
   user: {
-    name: string
-    email: string
-    image?: string
-  }
-  onLogout: () => void
+    names: string;
+    email: string;
+    profilePictureUrl?: string;
+  };
+  onLogout: () => void;
 }
 
 export function ProfileCard({ user, onLogout }: ProfileCardProps) {
@@ -28,11 +28,11 @@ export function ProfileCard({ user, onLogout }: ProfileCardProps) {
           className="relative h-12 w-12 rounded-full overflow-hidden"
           aria-label="Open user menu"
         >
-          {user.image ? (
+          {user.profilePictureUrl ? (
             <Image
             fill
-              src={user.image}
-              alt={user.name}
+              src={user.profilePictureUrl}
+              alt={user.names}
               className="h-full w-full object-cover"
             />
           ) : (
@@ -44,11 +44,12 @@ export function ProfileCard({ user, onLogout }: ProfileCardProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64 p-4" align="end">
         <div className="flex items-center gap-4 mb-4">
-          <div className="h-12 w-12 rounded-full overflow-hidden">
-            {user.image ? (
-              <img
-                src={user.image}
-                alt={user.name}
+          <div className="h-12 w-12 rounded-full overflow-hidden relative">
+            {user.profilePictureUrl ? (
+              <Image
+                fill
+                src={user.profilePictureUrl}
+                alt={user.names}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -58,7 +59,7 @@ export function ProfileCard({ user, onLogout }: ProfileCardProps) {
             )}
           </div>
           <div className="flex-1 space-y-1">
-            <p className="text-sm font-medium">{user.name}</p>
+            <p className="text-sm font-medium">{user.names}</p>
             <p className="text-xs text-muted-foreground">{user.email}</p>
           </div>
         </div>

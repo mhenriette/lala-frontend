@@ -5,6 +5,8 @@ import { login } from "@/utils/login";
 import { ProfileCard } from "../cards/ProfileCard";
 import { useAuth } from "@/context/AuthContext";
 import useIsSignedIn from "@/hooks/isSignedIn";
+import { ProfileCardSkeleton } from "../cards/ProfileCardSkeleton";
+import { Skeleton } from "../ui/skeleton";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -15,7 +17,7 @@ const navLinks = [
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { signIn, signOut } = useAuth();
+  const { signIn, signOut, userData, signinLoading } = useAuth();
   const isSignedIn = useIsSignedIn();
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +28,8 @@ export const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  console.log(userData, "userData")
 
   // const handleToggleMenu = () => {
   //   setIsMenuOpen(!isMenuOpen);
@@ -39,7 +43,6 @@ export const Navbar = () => {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <Link
             href="/"
             className="flex items-center gap-2 transition-colors hover:text-blue-600"
@@ -53,7 +56,6 @@ export const Navbar = () => {
             </span>
           </Link>
 
-          {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center justify-center gap-8">
             {navLinks.map((link) => (
               <Link
@@ -68,16 +70,10 @@ export const Navbar = () => {
             ))}
           </div>
           <>
-            {isSignedIn ? (
-              <ProfileCard
-                user={{
-                  name: "John Doe",
-                  email: "john.doe@example.com",
-                  image:
-                    "https://lh3.googleusercontent.com/a/ACg8ocIiAwOfoOkc6vorzZC6Npz3RfsNoBG3Ig6kVjMMDIu0Zd7KGQevnw=s96-c",
-                }}
-                onLogout={signOut}
-              />
+            {signinLoading ? (
+              <Skeleton className="h-12 w-12  rounded-full" />
+            ) : isSignedIn ? (
+              <ProfileCard user={userData} onLogout={signOut} />
             ) : (
               <div className="flex items-center gap-4">
                 <GoogleLogin onSuccess={signIn} useOneTap />
@@ -86,7 +82,6 @@ export const Navbar = () => {
           </>
         </div>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden py-4 space-y-2 mt-2 bg-white/95 rounded-lg">
             {navLinks.map((link) => (
@@ -100,7 +95,6 @@ export const Navbar = () => {
               </Link>
             ))}
             <div className="px-4 py-2">
-              {/* <Button className="w-full">Sign In</Button> */}
               <GoogleLogin onSuccess={login} useOneTap />
             </div>
             <ProfileCard
