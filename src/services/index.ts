@@ -27,7 +27,6 @@ api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const token = localStorage.getItem("@Auth:accessToken")
-    console.log(token, "token from access token")
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }

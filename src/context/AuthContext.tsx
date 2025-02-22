@@ -3,6 +3,7 @@ import { CredentialResponse } from "@react-oauth/google";
 import { login } from "@/utils/login";
 import { decode} from "jsonwebtoken";
 import { useMutation } from "@tanstack/react-query";
+import router from "next/router";
 
 const AuthContext = createContext<any>({} as any);
 
@@ -28,6 +29,7 @@ export const AuthProvider = ({ children }: { children:  ReactNode }) => {
     },
     onSuccess: () => {
       getUserData();
+      router.push("/");
     },
     onError: (error: any) => {
       console.error("Error signing in", error);

@@ -10,7 +10,6 @@ const useIsSignedIn = () => {
       : null;
     setAccessToken(getUserfromLocalStorage);
   }, []);
-  console.log(accessToken, "accessToken")
   return userData && accessToken ? true : false;
 };
 

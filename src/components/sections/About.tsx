@@ -45,8 +45,8 @@ export default function AboutSection() {
               key={index}
               className="text-center p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow"
             >
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mb-4">
-                <feature.icon className="h-6 w-6 text-primary" />
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-[#F25F4C] mb-4">
+                <feature.icon className="h-6 w-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
               <p className="text-muted-foreground">{feature.description}</p>

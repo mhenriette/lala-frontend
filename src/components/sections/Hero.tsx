@@ -26,35 +26,27 @@ export const Hero = () => {
 
   return (
     <div className="relative min-h-[90vh] flex items-center justify-center">
-      {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-[url('/hero.avif')] bg-cover bg-center"
-      >
+      <div className="absolute inset-0 bg-[url('/hero.avif')] bg-cover bg-center">
         <div className="absolute inset-0 bg-black/50" />
       </div>
-
-      {/* Content */}
       <div className="relative container mx-auto px-4 py-20 text-center">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
           Find Your Dream Property
         </h1>
         <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
-          Discover the perfect property that matches your lifestyle. Browse through our extensive collection of premium listings.
+          Discover the perfect property that matches your lifestyle. Browse
+          through our extensive collection of premium listings.
         </p>
 
-        {/* Search and Filters */}
         <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            {/* Search Input */}
             <div className="md:col-span-5 relative">
-              <Input 
-                placeholder="Search properties..." 
+              <Input
+                placeholder="Search properties..."
                 className="w-full pl-10"
               />
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
             </div>
-
-            {/* City Filter */}
             <div className="md:col-span-3">
               <Select value={selectedCity} onValueChange={setSelectedCity}>
                 <SelectTrigger className="w-full">
@@ -62,15 +54,17 @@ export const Hero = () => {
                 </SelectTrigger>
                 <SelectContent className="w-full min-w-[200px] bg-white z-[100] border-none">
                   {cities.map((city) => (
-                    <SelectItem key={city} value={city} className="cursor-pointer hover:bg-gray-100">
+                    <SelectItem
+                      key={city}
+                      value={city}
+                      className="cursor-pointer hover:bg-gray-100"
+                    >
                       {city}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-
-            {/* Date Picker */}
             <div className="md:col-span-2">
               <Popover>
                 <PopoverTrigger asChild>
@@ -93,30 +87,28 @@ export const Hero = () => {
               </Popover>
             </div>
 
-            {/* Search Button */}
             <div className="md:col-span-2">
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                Search
-              </Button>
+              <Button className="w-full text-white">Search</Button>
             </div>
           </div>
 
-          {/* Popular Searches */}
-          <div className="mt-6 flex flex-wrap gap-2 justify-center">
+          <div className="mt-6 flex flex-wrap gap-2 justify-center items-center">
             <span className="text-sm text-gray-600">Popular:</span>
-            {["Apartments", "Houses", "Villas", "Offices", "Land"].map((tag) => (
-              <Button
-                key={tag}
-                variant="outline"
-                size="sm"
-                className="hover:bg-blue-50"
-              >
-                {tag}
-              </Button>
-            ))}
+            {["Apartments", "Houses", "Villas", "Offices", "Land"].map(
+              (tag) => (
+                <Button
+                  key={tag}
+                  variant="outline"
+                  size="sm"
+                  className="hover:bg-[#F25F4C]/50"
+                >
+                  {tag}
+                </Button>
+              )
+            )}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 } 

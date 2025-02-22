@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { CredentialResponse, GoogleLogin, useGoogleLogin} from "@react-oauth/google";
-import { login } from "@/utils/login";
+import {  GoogleLogin} from "@react-oauth/google";
 import { ProfileCard } from "../cards/ProfileCard";
 import { useAuth } from "@/context/AuthContext";
 import useIsSignedIn from "@/hooks/isSignedIn";
 import { Skeleton } from "../ui/skeleton";
-import { Button } from "../ui/button";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/explore", label: "Explore" },
@@ -28,8 +26,14 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLogin = (role: "renter" | "host", credentialResponse: CredentialResponse) => {
-    return signIn({type: role, credentialResponse})}
+    const handleLogin = (
+      role: "renter" | "host",
+      credentialResponse?: string
+    ) => {
+      return signIn({ type: role, credentialResponse });
+    };
+
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -40,11 +44,11 @@ export const Navbar = () => {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="flex items-center gap-2 transition-colors hover:text-blue-600"
+            className="flex items-center gap-2 transition-colors hover:text-[#F25F4C]"
           >
             <span
-              className={`font-semibold text-xl ${
-                scrolled ? "text-gray-900" : "text-white"
+              className={`font-extrabold text-2xl ${
+                scrolled ? "text-[#F25F4C]" : "text-white"
               }`}
             >
               M-Seller
@@ -56,8 +60,8 @@ export const Navbar = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-base font-bold transition-all duration-300 hover:text-blue-600 relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 ${
-                  scrolled ? "text-gray-700" : "text-white"
+                className={`text-base font-bold transition-all duration-300 hover:text-[#F25F4C] relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#F25F4C] after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 ${
+                  scrolled ? "text-[#10172A]" : "text-white"
                 }`}
               >
                 {link.label}
@@ -71,18 +75,12 @@ export const Navbar = () => {
               <ProfileCard user={userData} onLogout={signOut} />
             ) : (
               <div className="flex gap-4">
-                <GoogleLogin
-                  onSuccess={(credentialResponse) =>
-                    handleLogin("renter", credentialResponse)
-                  }
-                  useOneTap
-                />
-                <GoogleLogin
-                  onSuccess={(credentialResponse) =>
-                    handleLogin("host", credentialResponse)
-                  }
-                  useOneTap
-                />
+                <Link
+                  href="/signin"
+                  className="text-white font-bold py-2 px-4 rounded-md bg-[#F25F4C]"
+                >
+                  Become a Member
+                </Link>
               </div>
             )}
           </>
