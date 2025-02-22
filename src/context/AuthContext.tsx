@@ -9,6 +9,7 @@ const AuthContext = createContext<any>({} as any);
 
 export const AuthProvider = ({ children }: { children:  ReactNode }) => {
     const [userData, setUserData] = useState<any>(null);
+    const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
 
 
   const getUserData = useCallback(() => {
@@ -16,6 +17,7 @@ export const AuthProvider = ({ children }: { children:  ReactNode }) => {
     if(accessToken){
       const userData = decode(accessToken);
       setUserData(userData);
+      setIsSignedIn(true);
     }
   }, []);
 
@@ -30,6 +32,7 @@ export const AuthProvider = ({ children }: { children:  ReactNode }) => {
     onSuccess: () => {
       getUserData();
       router.push("/");
+      setIsSignedIn(true);
     },
     onError: (error: any) => {
       console.error("Error signing in", error);
@@ -39,10 +42,11 @@ export const AuthProvider = ({ children }: { children:  ReactNode }) => {
     async function signOut(): Promise<void> {
       localStorage.removeItem("@Auth:accessToken");
       setUserData(null);
+      setIsSignedIn(false);
   }
 
   return (
-    <AuthContext.Provider value={{ signIn: signInMutation.mutate, signinLoading: signInMutation.isPending, signOut , userData}}>
+    <AuthContext.Provider value={{ signIn: signInMutation.mutate, signinLoading: signInMutation.isPending, signOut , userData, isSignedIn}}>
       {children}
     </AuthContext.Provider>
   );

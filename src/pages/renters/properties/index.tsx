@@ -11,10 +11,8 @@ export default function MyProperties() {
     queryFn: async () =>
       await Promise.all([getAllProperties(), getAllMyBookings()]),
   });
-  console.log(data, "==== data");
   const properties = data?.[0];
   const bookings = data?.[1];
-  console.log(bookings, "==== bookings");
   if (isPending) {
     return <div>loading</div>;
   }
@@ -35,7 +33,3 @@ export default function MyProperties() {
     </div>
   );
 }
-
-// MyProperties.getLayout = function getLayout(page) {
-//   return <HostLayout>{page}</HostLayout>;
-// };

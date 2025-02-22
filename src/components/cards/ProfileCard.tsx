@@ -45,7 +45,7 @@ export function ProfileCard({ user, onLogout }: ProfileCardProps) {
       <DropdownMenuContent className="w-64 p-4" align="end">
         <div className="flex items-center gap-4 mb-4">
           <div className="h-12 w-12 rounded-full overflow-hidden relative">
-            {user.profilePictureUrl ? (
+            {user?.profilePictureUrl ? (
               <Image
                 fill
                 src={user.profilePictureUrl}

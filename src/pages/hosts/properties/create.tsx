@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { ReactNode, useState } from "react"
 import { useRouter } from "next/router"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -40,7 +40,7 @@ export default function CreateProperty() {
     try {
 
       await createProperty(data);
-        router.push("/hosts/properties") // Redirect to properties list
+        router.push("/hosts/properties")
     } catch (error) {
       console.error("Failed to create property:", error)
     } finally {
@@ -58,7 +58,6 @@ export default function CreateProperty() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Hero Section */}
       <div className="relative py-20 bg-blue-600">
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative container mx-auto px-4 text-center text-white">
@@ -68,12 +67,9 @@ export default function CreateProperty() {
           </p>
         </div>
       </div>
-
-      {/* Form Section */}
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Title Input */}
             <div className="space-y-2">
               <label htmlFor="title" className="flex items-center text-lg font-medium text-gray-700">
                 <Building2 className="w-5 h-5 mr-2 text-blue-600" />
@@ -89,8 +85,6 @@ export default function CreateProperty() {
                 className="text-lg"
               />
             </div>
-
-            {/* Description Input */}
             <div className="space-y-2">
               <label htmlFor="description" className="flex items-center text-lg font-medium text-gray-700">
                 <FileText className="w-5 h-5 mr-2 text-blue-600" />
@@ -108,7 +102,6 @@ export default function CreateProperty() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Price Input */}
               <div className="space-y-2">
                 <label htmlFor="pricePerNight" className="flex items-center text-lg font-medium text-gray-700">
                   <DollarSign className="w-5 h-5 mr-2 text-blue-600" />
@@ -131,7 +124,6 @@ export default function CreateProperty() {
                 </div>
               </div>
 
-              {/* Location Input */}
               <div className="space-y-2">
                 <label htmlFor="location" className="flex items-center text-lg font-medium text-gray-700">
                   <MapPin className="w-5 h-5 mr-2 text-blue-600" />
@@ -164,6 +156,6 @@ export default function CreateProperty() {
 } 
 
 
-CreateProperty.getLayout = function getLayout(page) {
+CreateProperty.getLayout = function getLayout(page: ReactNode) {
   return <HostLayout>{page}</HostLayout>;
 };

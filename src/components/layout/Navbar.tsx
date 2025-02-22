@@ -2,28 +2,20 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { ProfileCard } from "../cards/ProfileCard";
 import { useAuth } from "@/context/AuthContext";
-import useIsSignedIn from "@/hooks/isSignedIn";
 import { Skeleton } from "../ui/skeleton";
-const navLinks = [
-  { href: "#home", label: "Home" },
-  { href: "#explore", label: "Explore" },
-  { href: "#about", label: "About" },
-];
 
 
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { signIn, signOut, userData, signinLoading } = useAuth();
-  const isSignedIn = useIsSignedIn();
+  const {signOut, userData, signinLoading, isSignedIn } = useAuth();
   const isHost = userData?.role === "HOST";
   const navLinks = [
     { href: "/", label: "Home" },
     { href: isHost ? "/hosts/properties" : "renters/properties", label: isHost ? 'My properties' : "Explore" },
-    { href: "/about", label: "About" },
+    { href: "#about", label: "About" },
   ];
-  console.log(userData, '=====  ')
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 20;

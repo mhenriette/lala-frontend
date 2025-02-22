@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getMyProperties } from "@/utils/properties";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { ReactNode } from "react";
 
 export default function MyProperties() {
   const { isPending, data } = useQuery({
@@ -34,6 +35,6 @@ export default function MyProperties() {
   );
 }
 
-MyProperties.getLayout = function getLayout(page) {
+MyProperties.getLayout = function getLayout(page: ReactNode) {
   return <HostLayout>{page}</HostLayout>;
 };
