@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
-import axios from "axios"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Building2, DollarSign, MapPin, FileText } from "lucide-react"
+import { createProperty } from "@/utils/properties"
+import HostLayout from "@/components/layout/HostLayout"
 
 interface PropertyFormData {
   title: string
@@ -34,24 +35,12 @@ export default function CreateProperty() {
       description: formData.description,
       pricePerNight: formData.pricePerNight,
       location: formData.location,
-      hostId: "2ce842cf-b124-4b60-8934-ccc85082df5d",
     };
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/properties`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(formData, "formData",
-      )
-      if (response.status === 201) {
-        router.push("/properties/create") // Redirect to properties list
-      }
+
+      await createProperty(data);
+        router.push("/hosts/properties") // Redirect to properties list
     } catch (error) {
       console.error("Failed to create property:", error)
     } finally {
@@ -173,3 +162,8 @@ export default function CreateProperty() {
     </div>
   )
 } 
+
+
+CreateProperty.getLayout = function getLayout(page) {
+  return <HostLayout>{page}</HostLayout>;
+};

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import {  GoogleLogin} from "@react-oauth/google";
 import { ProfileCard } from "../cards/ProfileCard";
 import { useAuth } from "@/context/AuthContext";
 import useIsSignedIn from "@/hooks/isSignedIn";
@@ -11,11 +10,20 @@ const navLinks = [
   { href: "#about", label: "About" },
 ];
 
+
+
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { signIn, signOut, userData, signinLoading } = useAuth();
   const isSignedIn = useIsSignedIn();
+  const isHost = userData?.role === "HOST";
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: isHost ? "/hosts/properties" : "renters/properties", label: isHost ? 'My properties' : "Explore" },
+    { href: "/about", label: "About" },
+  ];
+  console.log(userData, '=====  ')
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 20;
@@ -26,15 +34,8 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-    const handleLogin = (
-      role: "renter" | "host",
-      credentialResponse?: string
-    ) => {
-      return signIn({ type: role, credentialResponse });
-    };
-
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
+    // e.preventDefault();
     const targetId = e.currentTarget.href.split('#')[1];
     const element = document.getElementById(targetId);
     if (element) {
@@ -66,7 +67,7 @@ export const Navbar = () => {
 
           <div className="hidden md:flex items-center justify-center gap-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 onClick={handleScroll}
@@ -75,7 +76,7 @@ export const Navbar = () => {
                 }`}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
           <>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
-import { MapPin, Star, Trash2, Info } from "lucide-react";
+import { MapPin, Star, Trash2, CalendarIcon } from "lucide-react";
 import { format, addDays } from "date-fns";
 import type { DateRange } from "react-day-picker";
 import {
@@ -9,19 +9,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteProperty } from "@/utils/properties";
+import { useRouter } from "next/router";
+import { bookProperty } from "@/utils/bookings";
 
 interface PropertyCardProps {
   id: string;
@@ -43,62 +42,64 @@ export default function PropertyCard({
   description,
   pricePerNight,
   location,
-  hostId,
-  currentUserId,
   imageUrl,
   rating,
   isAvailable,
   nextAvailableDate,
 }: PropertyCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [showBookingDialog, setShowBookingDialog] = useState(false);
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [isBooking, setIsBooking] = useState(false);
-  const [guestCount, setGuestCount] = useState(1);
+  const router = useRouter();
+  const { userData } = useAuth();
+  const queryClient = useQueryClient();
+  const deleteMutation = useMutation({
+    mutationKey: ["delete-property"],
+    mutationFn: () => {
+      return deleteProperty(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-properties"] });
+      router.push("/hosts/properties");
+    },
+  });
+
+  const bookingMutation = useMutation({
+    mutationKey: ["book-property"],
+    mutationFn: ({
+      from,
+      to,
+      propertyId,
+    }: {
+      from: Date;
+      to: Date;
+      propertyId: string;
+    }) => {
+      return bookProperty({ from, to, propertyId });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-properties"] });
+    }
+  });
+
+  const isHost = userData?.role === "HOST";
+
+  const [date, setDate] = useState<DateRange>({
+    from: addDays(new Date(), 1),
+    to: addDays(new Date(), 8),
+  });
+  const handleBooking = (e: SubmitEvent) => {
+    e.preventDefault();
+    if (!date.from || !date.to) return;
+    bookingMutation.mutate({ from: date.from, to: date.to, propertyId: id });
+  };
 
   // const isHost = currentUserId === hostId;
-  const isHost = true;
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (confirm("Are you sure you want to delete this property?")) {
       console.log("Deleting property", id);
+      deleteMutation.mutate();
     }
-  };
-
-  // const handleBook = async () => {
-  //   if (!dateRange?.from || !dateRange?.to) return;
-
-  //   setIsBooking(true);
-  //   try {
-  //     // Add your booking API call here
-  //     await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/bookings`, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         propertyId: id,
-  //         startDate: dateRange.from,
-  //         endDate: dateRange.to,
-  //         guestCount,
-  //         totalPrice: calculateTotalPrice(),
-  //       }),
-  //     });
-  //     setShowBookingDialog(false);
-  //   } catch (error) {
-  //     console.error("Failed to book property:", error);
-  //   } finally {
-  //     setIsBooking(false);
-  //   }
-  // };
-
-const getDaysBetween = (start: Date | undefined, end: Date | undefined) => {
-  if (!start || !end) return 0;
-  return Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-};
-
-  const calculateTotalPrice = () => {
-    if (!dateRange?.from || !dateRange?.to) return 0;
-    return pricePerNight * getDaysBetween(dateRange.from, dateRange.to);
   };
 
   const disabledDays = [
@@ -242,12 +243,85 @@ const getDaysBetween = (start: Date | undefined, end: Date | undefined) => {
               <h4 className="font-semibold">Description</h4>
               <p className="text-muted-foreground">{description}</p>
             </div>
+            {!isHost ? (
+              <form onSubmit={handleBooking} className="grid gap-4 py-4">
+                <div>
+                  <h2 className="font-bold mb-0">Book Your Stay</h2>
+                  <h3>
+                    Select your check-in and check-out dates to book this
+                    property.
+                  </h3>
+                </div>
 
+                <div className="grid gap-2">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="date"
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date?.from ? (
+                          date.to ? (
+                            <>
+                              {format(date.from, "LLL dd, y")} -{" "}
+                              {format(date.to, "LLL dd, y")}
+                            </>
+                          ) : (
+                            format(date.from, "LLL dd, y")
+                          )
+                        ) : (
+                          <span>Pick your dates</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        required
+                        mode="range"
+                        defaultMonth={date?.from}
+                        selected={date}
+                        onSelect={setDate}
+                        numberOfMonths={2}
+                        disabled={{ before: new Date() }}
+                        fromDate={new Date()}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={bookingMutation.isPending}
+                >
+                  {bookingMutation.isPending ? "Booking..." : "Confirm Booking"}
+                </Button>
+              </form>
+            ) : null}
             {isHost && (
-              <div className="flex justify-end">
-                <Button variant="destructive" onClick={handleDelete}>
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete Property
+              <div className="flex justify-end gap-2">
+                <Button variant={"ghost"} asChild>
+                  <Link href={`/hosts/properties/edit/${id}`}>
+                    Edit Property
+                  </Link>
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleDelete}
+                  disabled={deleteMutation.isPending}
+                >
+                  {deleteMutation.isPending ? (
+                    "Deleting..."
+                  ) : (
+                    <>
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete Property
+                    </>
+                  )}
                 </Button>
               </div>
             )}

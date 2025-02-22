@@ -63,6 +63,7 @@ export function ProfileCard({ user, onLogout }: ProfileCardProps) {
             <p className="text-xs text-muted-foreground">{user.email}</p>
           </div>
         </div>
+        {}
         <Button
           variant="outline"
           className="w-full justify-start text-red-600 hover:text-red-600 hover:bg-red-50"

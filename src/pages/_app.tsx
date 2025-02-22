@@ -12,15 +12,16 @@ const ptSans = PT_Sans({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
-      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-        <QueryProvider>
-          <AuthProvider>
-            <main className={ptSans.className}>
-              <Component {...pageProps} />
-            </main>
-          </AuthProvider>
-        </QueryProvider>
-      </GoogleOAuthProvider>
+    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+      <QueryProvider>
+        <AuthProvider>
+          <main className={ptSans.className}>
+            {getLayout(<Component {...pageProps} />)}
+          </main>
+        </AuthProvider>
+      </QueryProvider>
+    </GoogleOAuthProvider>
   );
 }
