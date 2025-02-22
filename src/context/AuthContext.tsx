@@ -23,8 +23,8 @@ export const AuthProvider = ({ children }: { children:  ReactNode }) => {
   }, [getUserData]);
 
   const signInMutation = useMutation({
-    mutationFn: async (credentialResponse: CredentialResponse) => {
-      await login(credentialResponse);
+    mutationFn: async ({credentialResponse, type}: {credentialResponse: CredentialResponse, type: "renter" | "host"}) => {
+      await login(credentialResponse, type);
     },
     onSuccess: () => {
       getUserData();
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children:  ReactNode }) => {
       console.error("Error signing in", error);
     },
   });
-  
+
     async function signOut(): Promise<void> {
       localStorage.removeItem("@Auth:accessToken");
       setUserData(null);

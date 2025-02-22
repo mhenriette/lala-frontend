@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { GoogleLogin } from "@react-oauth/google";
+import { CredentialResponse, GoogleLogin, useGoogleLogin} from "@react-oauth/google";
 import { login } from "@/utils/login";
 import { ProfileCard } from "../cards/ProfileCard";
 import { useAuth } from "@/context/AuthContext";
 import useIsSignedIn from "@/hooks/isSignedIn";
-import { ProfileCardSkeleton } from "../cards/ProfileCardSkeleton";
 import { Skeleton } from "../ui/skeleton";
-
+import { Button } from "../ui/button";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/explore", label: "Explore" },
@@ -29,12 +28,8 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  console.log(userData, "userData")
-
-  // const handleToggleMenu = () => {
-  //   setIsMenuOpen(!isMenuOpen);
-  // };
-
+  const handleLogin = (role: "renter" | "host", credentialResponse: CredentialResponse) => {
+    return signIn({type: role, credentialResponse})}
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -75,8 +70,19 @@ export const Navbar = () => {
             ) : isSignedIn ? (
               <ProfileCard user={userData} onLogout={signOut} />
             ) : (
-              <div className="flex items-center gap-4">
-                <GoogleLogin onSuccess={signIn} useOneTap />
+              <div className="flex gap-4">
+                <GoogleLogin
+                  onSuccess={(credentialResponse) =>
+                    handleLogin("renter", credentialResponse)
+                  }
+                  useOneTap
+                />
+                <GoogleLogin
+                  onSuccess={(credentialResponse) =>
+                    handleLogin("host", credentialResponse)
+                  }
+                  useOneTap
+                />
               </div>
             )}
           </>
@@ -95,16 +101,14 @@ export const Navbar = () => {
               </Link>
             ))}
             <div className="px-4 py-2">
-              <GoogleLogin onSuccess={login} useOneTap />
+              <GoogleLogin
+                onSuccess={(credentialResponse) =>
+                  handleLogin("host", credentialResponse)
+                }
+                useOneTap
+              />
             </div>
-            <ProfileCard
-              user={{
-                name: "John Doe",
-                email: "john.doe@example.com",
-                image: "https://via.placeholder.com/150",
-              }}
-              onLogout={() => {}}
-            />
+            <ProfileCard user={userData} onLogout={signOut} />
           </div>
         )}
       </div>
