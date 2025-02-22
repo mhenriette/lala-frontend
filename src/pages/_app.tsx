@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
       <QueryProvider>
         <AuthProvider>
-          <main className={ptSans.className}>
+          <main className={`${ptSans.className} h-min-screen h-full flex-1 flex flex-col`} >
             {getLayout(<Component {...pageProps} />)}
           </main>
         </AuthProvider>

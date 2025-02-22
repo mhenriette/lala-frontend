@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Image from "next/image";
 import { MapPin, Star, Trash2, CalendarIcon } from "lucide-react";
 import { format, addDays } from "date-fns";
@@ -86,13 +86,11 @@ export default function PropertyCard({
     from: addDays(new Date(), 1),
     to: addDays(new Date(), 8),
   });
-  const handleBooking = (e: SubmitEvent) => {
+  const handleBooking = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!date.from || !date.to) return;
     bookingMutation.mutate({ from: date.from, to: date.to, propertyId: id });
   };
-
-  // const isHost = currentUserId === hostId;
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -134,10 +132,10 @@ export default function PropertyCard({
               />
               <div className="absolute top-4 left-4 flex gap-2">
                 <Badge
-                  variant={isAvailable ? "success" : "destructive"}
+                  variant="success"
                   className="text-xs font-medium"
                 >
-                  {isAvailable ? "Available" : "Booked"}
+                  {"Available"}
                 </Badge>
                 {rating && (
                   <Badge
@@ -231,12 +229,6 @@ export default function PropertyCard({
                 <span className="text-xl font-bold">${pricePerNight}</span>
                 <span className="text-muted-foreground"> /night</span>
               </div>
-              {/* <Button
-                onClick={() => setShowBookingDialog(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Book Now
-              </Button> */}
             </div>
 
             <div className="space-y-2">
@@ -281,11 +273,10 @@ export default function PropertyCard({
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                        required
                         mode="range"
                         defaultMonth={date?.from}
                         selected={date}
-                        onSelect={setDate}
+                        onSelect={setDate as any}
                         numberOfMonths={2}
                         disabled={{ before: new Date() }}
                         fromDate={new Date()}
@@ -328,98 +319,6 @@ export default function PropertyCard({
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* <Dialog open={showBookingDialog} onOpenChange={setShowBookingDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Book Your Stay at {title}</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="check-in">Check-in</Label>
-                <Input
-                  id="check-in"
-                  value={
-                    dateRange?.from
-                      ? format(dateRange.from, "MMM dd, yyyy")
-                      : ""
-                  }
-                  readOnly
-                />
-              </div>
-              <div>
-                <Label htmlFor="check-out">Check-out</Label>
-                <Input
-                  id="check-out"
-                  value={
-                    dateRange?.to ? format(dateRange.to, "MMM dd, yyyy") : ""
-                  }
-                  readOnly
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="guests">Guests</Label>
-              <Input
-                id="guests"
-                type="number"
-                min={1}
-                max={10}
-                value={guestCount}
-                onChange={(e) => setGuestCount(Number(e.target.value))}
-              />
-            </div>
-            <CalendarComponent
-              mode="range"
-              selected={dateRange}
-              onSelect={setDateRange}
-              numberOfMonths={2}
-              disabled={disabledDays}
-              className="rounded-md border"
-            />
-            {dateRange?.from && dateRange?.to && (
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Total nights:</span>
-                  <span>{getDaysBetween(dateRange.from, dateRange.to)}</span>
-                </div>
-                <div className="flex justify-between font-semibold">
-                  <span>Total price:</span>
-                  <span>${calculateTotalPrice()}</span>
-                </div>
-              </div>
-            )}
-          </div>
-          <DialogFooter className="flex-col items-stretch space-y-2">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div>
-                    <Button
-                      onClick={() => {}}
-                      disabled={!dateRange?.from || !dateRange?.to || isBooking}
-                      className="w-full bg-blue-600 hover:bg-blue-700"
-                    >
-                      {isBooking ? "Booking..." : "Confirm Booking"}
-                    </Button>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>
-                    Click to confirm your booking for{" "}
-                    {getDaysBetween(dateRange?.from!, dateRange?.to!)} nights.
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <div className="text-center text-sm text-muted-foreground">
-              <Info className="inline-block w-4 h-4 mr-1" />
-              You won't be charged yet
-            </div>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog> */}
     </>
   );
 }

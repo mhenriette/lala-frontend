@@ -44,7 +44,7 @@ export const rejectBooking = async (id: string) => {
         }
     );
 }
-export const confirmtBooking = async (id: string) => {
+export const confirmBooking = async (id: string) => {
     return axios.put(
         `http://localhost:8000/api/bookings/confirm/${id}`,
         {},
@@ -55,3 +55,4 @@ export const confirmtBooking = async (id: string) => {
         }
     );
 }
+

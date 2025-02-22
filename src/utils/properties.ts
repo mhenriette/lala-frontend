@@ -87,3 +87,14 @@ export const updateProperty = async (id: string, data: { title: string, descript
 
     return res.data
   }
+
+
+  export const getTheirBookings = async () => {
+    const res =  await axios.get<{ id: string, status: string, from: string, until: string, property: { title: string, location: string, pricePerNight: number, hostId: string, rating: number, isAvailable: boolean }}[]>("http://localhost:8000/api/bookings/their", {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("@Auth:accessToken")}`,
+        },
+    });
+
+    return res.data
+  }

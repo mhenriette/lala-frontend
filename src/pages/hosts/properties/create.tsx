@@ -58,10 +58,12 @@ export default function CreateProperty() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <div className="relative py-20 bg-blue-600">
+      <div className="relative py-10 bg-[#F25F4C]">
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative container mx-auto px-4 text-center text-white">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">List Your Property</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            List Your Property
+          </h1>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
             Share your space with travelers and earn extra income
           </p>
@@ -71,8 +73,11 @@ export default function CreateProperty() {
         <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-2">
-              <label htmlFor="title" className="flex items-center text-lg font-medium text-gray-700">
-                <Building2 className="w-5 h-5 mr-2 text-blue-600" />
+              <label
+                htmlFor="title"
+                className="flex items-center text-lg font-medium text-gray-700"
+              >
+                <Building2 className="w-5 h-5 mr-2 text-[#f25f4c]" />
                 Property Title
               </label>
               <Input
@@ -86,8 +91,11 @@ export default function CreateProperty() {
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="description" className="flex items-center text-lg font-medium text-gray-700">
-                <FileText className="w-5 h-5 mr-2 text-blue-600" />
+              <label
+                htmlFor="description"
+                className="flex items-center text-lg font-medium text-gray-700"
+              >
+                <FileText className="w-5 h-5 mr-2 text-[#f25f4c]" />
                 Description
               </label>
               <Textarea
@@ -103,12 +111,17 @@ export default function CreateProperty() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label htmlFor="pricePerNight" className="flex items-center text-lg font-medium text-gray-700">
-                  <DollarSign className="w-5 h-5 mr-2 text-blue-600" />
+                <label
+                  htmlFor="pricePerNight"
+                  className="flex items-center text-lg font-medium text-gray-700"
+                >
+                  <DollarSign className="w-5 h-5 mr-2 text-[#f25f4c]" />
                   Price per Night
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                    $
+                  </span>
                   <Input
                     id="pricePerNight"
                     name="pricePerNight"
@@ -125,8 +138,11 @@ export default function CreateProperty() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="location" className="flex items-center text-lg font-medium text-gray-700">
-                  <MapPin className="w-5 h-5 mr-2 text-blue-600" />
+                <label
+                  htmlFor="location"
+                  className="flex items-center text-lg font-medium text-gray-700"
+                >
+                  <MapPin className="w-5 h-5 mr-2 text-[#f25f4c]" />
                   Location
                 </label>
                 <Input
@@ -143,16 +159,18 @@ export default function CreateProperty() {
 
             <Button
               type="submit"
-              className="w-full h-14 text-lg bg-blue-600 hover:bg-blue-700 text-white mt-8 rounded-xl"
+              className="w-full h-14 text-lg bg-[#F25F4C] hover:bg-[#F25F4C]/90 text-white mt-8 rounded-xl"
               disabled={isLoading}
             >
-              {isLoading ? "Creating your listing..." : "Create Property Listing"}
+              {isLoading
+                ? "Creating your listing..."
+                : "Create Property Listing"}
             </Button>
           </form>
         </div>
       </div>
     </div>
-  )
+  );
 } 
 
 

@@ -6,7 +6,7 @@ import { Skeleton } from "../ui/skeleton";
 
 
 
-export const Navbar = () => {
+export const Navbar = ({ subpage }: { subpage?: boolean }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const {signOut, userData, signinLoading, isSignedIn } = useAuth();
@@ -40,7 +40,7 @@ export const Navbar = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"
-      }`}
+      } ${subpage ? "border-b border-[#F25F4C]" : ""}`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
@@ -64,8 +64,8 @@ export const Navbar = () => {
                 href={link.href}
                 onClick={handleScroll}
                 className={`text-base font-bold transition-all duration-300 hover:text-[#F25F4C] relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#F25F4C] after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 ${
-                  scrolled ? "text-[#10172A]" : "text-white"
-                }`}
+                  scrolled  ? "text-[#10172A]" : "text-white"
+                } ${subpage && "text-[#F25F4C]"}`}
               >
                 {link.label}
               </Link>
